@@ -18,7 +18,6 @@ public:
     int equalSubstring(string s, string t, int maxCost) {
         int ans=0;
         int n=s.size();
-        int curr_cost=0;
         for(int i=0;i<n;i++){
             string temp1="";
             string temp2="";
@@ -26,7 +25,7 @@ public:
                 temp1+=s[j];
                 temp2+=t[j];
             }
-            ans=max(ans,helper(temp1,temp2,maxCost));//calc for each substring
+            ans=max(ans,helper(temp1,temp2,maxCost));//calc for each substring pair
         }
         return ans;
     }
