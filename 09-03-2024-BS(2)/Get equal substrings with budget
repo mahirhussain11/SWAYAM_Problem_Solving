@@ -1,0 +1,41 @@
+//Brute force- check for every substring pair ( TLE is coming at last test case).
+class Solution {
+public:
+    int helper(string s, string t, int maxCost) {
+        int ans=0;
+        int n=s.size();
+        int curr_cost=0;
+        for(int i=0;i<n;i++){
+            int c1=(int)s[i];
+            int c2=(int)t[i];
+            int diff=abs(c1-c2);
+            curr_cost+=diff;
+            if(curr_cost>maxCost)break;
+            ans++;
+        }
+        return ans;
+    }
+    int equalSubstring(string s, string t, int maxCost) {
+        int ans=0;
+        int n=s.size();
+        int curr_cost=0;
+        for(int i=0;i<n;i++){
+            string temp1="";
+            string temp2="";
+            for(int j=i;j<n;j++){
+                temp1+=s[j];
+                temp2+=t[j];
+            }
+            ans=max(ans,helper(temp1,temp2,maxCost));//calc for each substring
+        }
+        return ans;
+    }
+};
+
+
+
+
+
+
+
+// Optimal approach- 
