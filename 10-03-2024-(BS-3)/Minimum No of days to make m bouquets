@@ -1,0 +1,38 @@
+class Solution {
+public:
+    int helper(vector<int>& nums, int mid, int m,int k){
+        int cnt=0;
+        int bloom=0;
+        for(int i=0;i<nums.size();i++){
+            if(nums[i]<=mid){
+                cnt++;
+            }
+            else{
+                bloom +=(cnt/k);
+                cnt=0;
+            }
+        }
+        bloom +=(cnt/k);
+        return (bloom>=m);
+    }
+    int minDays(vector<int>& nums, int m, int k) {
+        int n=nums.size();
+        if(m>n/k)return -1;
+        int mini_ele=*min_element(nums.begin(),nums.end());//lower bound for search space
+        int maxi_ele=*max_element(nums.begin(),nums.end());//upper bound for search space
+        int l=mini_ele;
+        int r=maxi_ele;
+        int ans=0;
+        while(l<=r){
+            int mid=l+(r-l)/2;
+            if(helper(nums,mid,m,k)==true){
+                ans=mid;
+                r=mid-1;
+            }
+            else{
+                l=mid+1;
+            }
+        }
+        return ans;
+    }
+};
