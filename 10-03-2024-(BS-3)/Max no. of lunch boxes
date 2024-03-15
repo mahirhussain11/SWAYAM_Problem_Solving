@@ -1,0 +1,45 @@
+#include<bits/stdc++.h>
+using namespace std;
+bool check_this_no_of_boxes(vector<int>&items,unordered_map<int, int>& map, int max_items_in_box, int no_of_boxes_assu ){
+    int items_in_one_box = 0;
+    for(auto it:map){
+        int items_per_box = it.second / no_of_boxes_assu;
+        items_in_one_box += items_per_box;
+    }
+    return (items_in_one_box >= max_items_in_box);
+}
+int main(){
+    int A;
+    cin >> A;
+    vector<int> items;
+    int n;
+    cin >> n;
+    for (int i = 0;i<n;i++){
+        int a;
+        cin >> a;
+        items.push_back(a);
+    }
+    int ans = -1;
+    unordered_map<int, int> map;
+    for (auto it : items){
+        map[it]++;
+    }
+    int max_freq = INT_MIN;
+    for(auto it:map){
+        max_freq = max(max_freq, it.second);
+    }
+    int l = 0;
+    int r = max_freq;
+    while(l<=r){
+        int mid = l + (r - l) / 2;
+        if(check_this_no_of_boxes(items,map,A,mid)==true){
+            ans = mid;
+            l = mid + 1;
+        }
+        else{
+            r = mid - 1;
+        }
+    }
+    cout << ans << endl;
+    return 0;
+}
