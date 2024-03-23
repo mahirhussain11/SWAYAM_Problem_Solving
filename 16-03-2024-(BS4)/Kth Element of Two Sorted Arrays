@@ -1,0 +1,28 @@
+#include<bits/stdc++.h>
+int kthElement(vector<int> &nums1, vector<int>& nums2, int n1, int n2, int k)
+{
+ 
+        if(n1>n2)return kthElement(nums2,nums1,n2,n1,k);  //will do BS on smaller array 
+        int ele_on_left=k;
+        int l=max(0,k-n2);
+        int r=min(k,n1);
+        double ans=0;
+        while(l<=r){
+            int mid1=l+(r-l)/2;
+            int mid2=ele_on_left-mid1;
+            int left1=INT_MIN,right1=INT_MAX;
+            int left2=INT_MIN,right2=INT_MAX;
+            if(mid1-1>=0)left1=nums1[mid1-1];
+            if(mid2-1>=0)left2=nums2[mid2-1];
+            if(mid1<n1)right1=nums1[mid1];
+            if(mid2<n2)right2=nums2[mid2];
+            if(left1<=right2 && left2<=right1){
+               ans=max(left1,left2);
+               break;
+            } 
+            else if(left1<right2)l=mid1+1;
+            else r=mid1-1;
+        }
+        return ans;
+
+}
