@@ -1,0 +1,45 @@
+#include<bits/stdc++.h>
+int helper(vector<int>&row, int n, int target){
+    int l=0;
+    int r=n-1;
+    int ans=n;
+    while(l<=r){
+           int mid=l+(r-l)/2;
+           if(row[mid]>target){
+               ans=mid;
+               r=mid-1;
+           }
+           else{
+               l=mid+1;
+           }
+    }
+    return ans;
+}
+int Count(vector<vector<int>> &matrix, int m, int n, int mid){
+    int ans=0;
+    for(int i=0;i<m;i++){
+        ans+=helper(matrix[i],n,mid);
+    }
+    return ans;
+}
+int median(vector<vector<int>> &matrix, int m, int n) {
+    int ans=-1;
+    int l=INT_MAX;
+    int r=INT_MIN;
+    for(int i=0;i<m;i++){
+        l=min(l,matrix[i][0]);
+        r=max(r,matrix[i][n-1]);
+    }
+    int total_ele_for_median=(m*n)/2;
+    while(l<=r){
+        int mid=l+(r-l)/2;
+        int cnt_ele_less_than_equal_mid=Count(matrix,m,n,mid);
+        if(cnt_ele_less_than_equal_mid<=total_ele_for_median){
+            l=mid+1;
+        }
+        else{
+            r=mid-1;
+        }
+    }
+    return l;
+}
