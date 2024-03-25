@@ -1,0 +1,21 @@
+#include<bits/stdc++.h>
+vector<int> bottomView(TreeNode<int> * root){
+    vector<int>ans;
+    queue< pair< TreeNode<int>*,int > > pq;
+    map<int,int>map;
+    if(root==NULL)return ans;
+    pq.push({root,0});
+    while(!pq.empty()){
+           auto it=pq.front();
+           pq.pop();
+           TreeNode<int>* node=it.first;
+           int level=it.second;
+           map[level]=node->data;
+           if(node->left)pq.push({node->left,level-1});
+           if(node->right)pq.push({node->right,level+1});
+    }
+    for(auto it:map){
+        ans.push_back(it.second);
+    }
+    return ans;
+}
