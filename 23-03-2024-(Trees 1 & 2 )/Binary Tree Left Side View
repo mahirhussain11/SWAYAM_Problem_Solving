@@ -1,0 +1,33 @@
+I- using recursion
+#include<bits/stdc++.h>
+void helper(BinaryTreeNode<int>*root, vector<int>&ans, int level){
+    if(root==NULL)return;
+    if(level==ans.size())ans.push_back(root->data);
+    helper(root->left, ans,level+1);
+    helper(root->right,ans,level+1);
+}
+vector<int> printLeftView(BinaryTreeNode<int>* root) {
+    // Write your code here.
+    vector<int>ans;
+    helper(root,ans,0);
+    return ans;
+}
+
+II- using level Order
+vector<int> printLeftView(BinaryTreeNode<int>* root) {
+   queue<BinaryTreeNode<int>*>pq;
+        pq.push(root);
+        vector<int>ans;
+        if(root==NULL)return ans;
+        while(!pq.empty()){
+            int size=pq.size();
+            while(size--){
+                 BinaryTreeNode<int>* curr=pq.front();
+                 pq.pop();
+                 if(size==0)ans.push_back(curr->data);
+                if(curr->right)pq.push(curr->right);
+                if(curr->left)pq.push(curr->left);
+            }
+        }
+        return ans;
+}
