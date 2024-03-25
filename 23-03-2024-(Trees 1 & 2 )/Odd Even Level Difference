@@ -1,0 +1,32 @@
+class Solution{
+  public:
+    /*You are required to complete this function*/
+    int getLevelDiff(Node *root)
+    {
+       //Your code here
+       int even_sum=0;
+       int odd_sum=0;
+       int flag=0;
+       queue<Node*>pq;
+       pq.push(root);
+       while(!pq.empty()){
+           int size=pq.size();
+           int level_sum=0;
+           for(int i=0;i<size;i++){
+               Node* curr=pq.front();
+               pq.pop();
+               level_sum+=curr->data;
+               if(curr->left)pq.push(curr->left);
+               if(curr->right)pq.push(curr->right);
+           }
+           if(flag%2==0){
+               even_sum+=level_sum;
+           }
+           else{
+               odd_sum+=level_sum;
+           }
+           flag++;
+       }
+       return (even_sum-odd_sum);
+    }
+};
