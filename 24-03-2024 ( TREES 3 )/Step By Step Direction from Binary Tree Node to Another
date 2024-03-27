@@ -1,0 +1,48 @@
+class Solution {
+public:
+    TreeNode* find_node(TreeNode* root, int t){
+        if(!root)return NULL;
+        if(root->val==t)return root;
+        TreeNode* left=find_node(root->left,t);
+        if(left)return left;
+        TreeNode* right=find_node(root->right,t);
+        if(right)return right;
+        return NULL;
+    }
+    TreeNode* LCA(TreeNode* root, TreeNode* p, TreeNode* q){
+        if(root==NULL || root==p || root==q)return root;
+        TreeNode* left=LCA(root->left,p,q);
+        TreeNode* right=LCA(root->right,p,q);
+        if(left==NULL)return right;
+        else if(right==NULL)return left;
+        else return root;
+    }
+    bool getPath(TreeNode* root, int t,string& path){
+        if(!root)return false;
+        if(root->val==t)return true;
+        path+="L";
+        bool left=getPath(root->left,t,path);
+        if(left)return true;
+        path.pop_back();
+        path+="R";
+        bool right=getPath(root->right,t,path);
+        if(right)return true;
+        path.pop_back();
+        return false;
+    }
+    string getDirections(TreeNode* root, int startValue, int destValue) {
+        TreeNode* p=find_node(root,startValue);
+        TreeNode* q=find_node(root,destValue);
+        TreeNode* lca=LCA(root,p,q);
+        string lca_to_p_path="";
+        string lca_to_q_path="";
+        getPath(lca,p->val,lca_to_p_path);
+        getPath(lca,q->val,lca_to_q_path);
+        string ans="";
+        for(int i=0;i<lca_to_p_path.size();i++){
+            ans+="U";
+        }
+        ans+=lca_to_q_path;
+        return ans;
+    }
+};
