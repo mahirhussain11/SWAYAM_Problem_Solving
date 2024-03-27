@@ -1,0 +1,43 @@
+class Solution{
+    public:
+    /* Should return minimum distance between a and b
+    in a tree with given root*/
+    Node* find_node(Node* root , int t){
+        if(!root)return NULL;
+        if(root->data==t)return root;
+        Node* left=find_node(root->left,t);
+        if(left)return left;
+        Node* right=find_node(root->right,t);
+        if(right)return right;
+        
+        return NULL;
+        
+    }
+    Node* LCA(Node* root, Node* a,Node* b){
+        if(root==NULL || root==a || root==b)return root;
+        Node* left=LCA(root->left,a,b);
+        Node* right=LCA(root->right,a,b);
+        if(left==NULL)return right;
+        else if(right==NULL)return left;
+        else return root;
+    }
+    int min_steps_to_target(Node* root,int t){
+        if(!root)return 1e9;
+        if(root->data==t)return 0;
+        int left=min_steps_to_target(root->left,t);
+        if(left!=1e9)return 1+left;
+        int right=min_steps_to_target(root->right,t);
+        if(right!=1e9)return 1+right;
+        return 1e9;
+        
+    }
+    int findDist(Node* root, int a, int b) {
+        // Your code here
+        Node* ath=find_node(root,a);
+        Node* bth=find_node(root,b);
+        Node* lca=LCA(root,ath,bth);
+        int steps1=min_steps_to_target(lca,a);
+        int steps2=min_steps_to_target(lca,b);
+        return steps1+steps2;
+    }
+};
