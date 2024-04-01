@@ -1,0 +1,21 @@
+class Solution
+{
+    void helper(Node* root, map<int,int>&map ){
+        if(!root)return;
+        helper(root->left,map);
+        map[root->data]++;
+        helper(root->right,map);
+    }
+    vector <int> findCommon(Node *root1, Node *root2)
+    {
+     vector<int>ans;
+     map<int,int>map;
+     helper(root1,map);
+     helper(root2,map);
+     for(auto it:map){
+         if(it.second>1)ans.push_back(it.first);
+     }
+     return ans;
+     
+    }
+};
