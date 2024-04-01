@@ -1,0 +1,33 @@
+#include<bits/stdc++.h>
+void addLeaves(TreeNode<int>*root,vector<int>&ans){
+   if(!root)return;
+   if(root->left==NULL && root->right==NULL){
+       ans.push_back(root->data);
+       return;
+   }
+   addLeaves(root->left,ans);
+   addLeaves(root->right,ans);
+}
+void addLeftNodes(TreeNode<int>*root,vector<int>&ans){
+    if(!root || (root->left==NULL && root->right==NULL))return;
+    ans.push_back(root->data);
+    if(root->left)addLeftNodes(root->left,ans);
+    else addLeftNodes(root->right,ans);
+}
+void addRightNodes(TreeNode<int>*root,vector<int>&ans){
+    if(!root || (root->left==NULL && root->right==NULL))return;
+    if(root->right)addRightNodes(root->right,ans);
+    else addRightNodes(root->left,ans);
+    ans.push_back(root->data);
+}
+vector<int> traverseBoundary(TreeNode<int> *root)
+{
+	vector<int>res;
+    if(!root)return res;
+    res.push_back(root->data);
+    addLeftNodes(root->left,res);
+    addLeaves(root->left,res);
+    addLeaves(root->right,res);
+    addRightNodes(root->right,res);
+    return res;
+}
