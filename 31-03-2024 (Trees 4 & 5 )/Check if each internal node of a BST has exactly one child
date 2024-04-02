@@ -1,0 +1,34 @@
+#include<bits/stdc++.h>
+using namespace std;
+bool helper(vector<int>&preorder){
+    int mini = INT_MAX;
+    int maxi = INT_MIN;
+    int size = preorder.size();
+    if(preorder[size-1]>preorder[size-2]){
+        maxi = preorder[size - 1];
+        mini = preorder[size - 2];
+    }
+    else{
+        maxi = preorder[size - 2];
+        mini = preorder[size - 1];
+    }
+    for (int i = size - 3; i >= 0;i--){
+        if(preorder[i]<mini)mini=preorder[i];
+        else if(preorder[i]>maxi)maxi=preorder[i];
+        else return false;
+    }
+    return true;
+}
+int main(){
+    vector<int> preorder;
+    int n;
+    cin >> n;
+    for (int i = 0; i < n;i++){
+        int a;
+        cin >> a;
+        preorder.push_back(a);
+    }
+    bool ans = helper(preorder);
+    cout << ans << endl;
+    return 0;
+}
