@@ -1,0 +1,43 @@
+#include <bits/stdc++.h> 
+#include<bits/stdc++.h>
+class Information{
+    public:
+    int maxi;
+    int mini;
+    bool isBST;
+    int size;
+    int sum;
+};
+
+Information helper(BinaryTreeNode<int>* root,int& ans){
+    if(!root){
+        return {INT_MIN,INT_MAX,true,0,-1};
+    }
+    Information left_sub_tree=helper(root->left,ans);
+    Information right_sub_tree=helper(root->right,ans);
+    Information curr_node;
+
+    curr_node.maxi=max(root->data,right_sub_tree.maxi);
+    curr_node.mini=min(root->data,left_sub_tree.mini);
+    curr_node.size=1+left_sub_tree.size+right_sub_tree.size;
+    
+    if(left_sub_tree.sum==-1 && right_sub_tree.sum==-1)curr_node.sum=root->data;
+    else if (left_sub_tree.sum==-1 && right_sub_tree.sum!=-1)curr_node.sum=root->data+right_sub_tree.sum;
+    else if (left_sub_tree.sum!=-1 && right_sub_tree.sum==-1)curr_node.sum=root->data+left_sub_tree.sum;
+    else curr_node.sum=root->data+right_sub_tree.sum+left_sub_tree.sum;
+    
+    if( left_sub_tree.isBST && right_sub_tree.isBST && (root->data>left_sub_tree.maxi && root->data<right_sub_tree.mini)){
+        curr_node.isBST=true;
+    }
+    else{
+        curr_node.isBST=false;
+    }
+    if(curr_node.isBST)ans=max(ans,curr_node.sum);
+    return curr_node;
+}
+int maximumSumBST(BinaryTreeNode<int>* root){
+    // Write your code here
+       int ans=0;
+    Information res=helper(root,ans);
+    return ans;
+}
