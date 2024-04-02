@@ -1,0 +1,21 @@
+class Solution {
+public:
+    TreeNode* helper(vector<int>&v){
+        if(v.size()==0)return NULL;
+        int mid=v.size()/2;
+        TreeNode* newnode=new TreeNode(v[mid]);
+        vector<int>left_part(v.begin(),v.begin()+mid);
+        vector<int>right_part(v.begin()+mid+1,v.end());
+        newnode->left=helper(left_part);
+        newnode->right=helper(right_part);
+        return newnode;
+    }
+    TreeNode* sortedListToBST(ListNode* head) {
+        vector<int>v;
+        while(head!=NULL){
+            v.push_back(head->val);
+            head=head->next;
+        }
+        return helper(v);
+    }
+};
