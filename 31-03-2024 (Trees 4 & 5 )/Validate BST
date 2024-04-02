@@ -1,0 +1,12 @@
+class Solution {
+public:
+    bool helper(TreeNode* root ,long long  int lb,long long int ub){
+        if(!root)return true;
+        return (root->val>lb&& root->val<ub)&&helper(root->left,lb,root->val)&&helper(root->right,root->val,ub);
+    }
+    bool isValidBST(TreeNode* root) {
+        long long int lb=-pow(2,31)-1;
+        long long int ub=pow(2,31);
+        return helper(root,lb,ub);
+    }
+};
