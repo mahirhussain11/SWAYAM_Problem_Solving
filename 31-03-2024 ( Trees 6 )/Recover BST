@@ -1,0 +1,28 @@
+class Solution {
+public:
+    TreeNode* ele1=NULL;
+    TreeNode* ele2=NULL;
+    bool isfound=false;
+    TreeNode* prev=NULL;
+    void helper(TreeNode* root){
+        if(!root)return;
+        helper(root->left);
+        if(prev!=NULL && root->val<prev->val && !isfound){
+            ele1=prev;
+            ele2=root;
+            isfound=true;
+        }
+        else if(prev!=NULL && root->val<prev->val){
+            ele2=root;
+        }
+        prev=root;
+        helper(root->right);
+    }
+    void recoverTree(TreeNode* root) {
+         if(!root)return ;
+         helper(root);
+         int temp=ele1->val;
+         ele1->val=ele2->val;
+         ele2->val=temp;
+    }
+};
