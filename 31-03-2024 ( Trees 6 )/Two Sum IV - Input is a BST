@@ -1,0 +1,15 @@
+class Solution {
+public:
+    bool helper(TreeNode* root ,set<int>&s,int k){
+        if(!root)return false;
+        int curr=root->val;
+        if(s.find(k-curr)!=s.end())return true;
+        s.insert(curr);
+        return (helper(root->left,s,k) || helper(root->right,s,k));
+    
+    }
+    bool findTarget(TreeNode* root, int k) {
+        set<int>s;
+        return helper(root,s,k);
+    }
+};
