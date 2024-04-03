@@ -1,3 +1,4 @@
+Method I -
 class Solution {
 public:
     TreeNode* helper(vector<int>&v){
@@ -17,5 +18,32 @@ public:
             head=head->next;
         }
         return helper(v);
+    }
+};
+
+Method II-
+class Solution {
+public:
+    
+    ListNode* middle(ListNode* start,ListNode* end){
+        ListNode* slow=start;
+        ListNode* fast=start;
+        while(fast!=end && fast->next!=end && fast->next->next!=end){
+            slow=slow->next;
+            fast=fast->next->next;
+        }
+        return slow;
+
+    }
+    TreeNode* buildTree(ListNode* start, ListNode* end){
+       if(start==end)return NULL;
+       ListNode* mid=middle(start,end);
+       TreeNode* newnode=new TreeNode(mid->val);
+       newnode->left=buildTree(start,mid);
+       newnode->right=buildTree(mid->next,end);
+       return newnode;
+    }
+    TreeNode* sortedListToBST(ListNode* head) {
+        return buildTree(head,NULL);
     }
 };
