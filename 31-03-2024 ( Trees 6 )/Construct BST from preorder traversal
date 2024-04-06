@@ -1,0 +1,15 @@
+class Solution {
+public:
+    TreeNode* helper(vector<int>&preorder,int& idx,int range_limit_min, int range_limit_max){
+        if(idx>=preorder.size())return NULL;
+        if(preorder[idx]>range_limit_max || preorder[idx]<range_limit_min)return NULL;
+        TreeNode* root=new TreeNode(preorder[idx++]);
+        root->left=helper(preorder,idx,range_limit_min,root->val);
+        root->right=helper(preorder,idx,root->val,range_limit_max);
+        return root;
+    }
+    TreeNode* bstFromPreorder(vector<int>& preorder) {
+        int idx=0;
+        return helper(preorder,idx,INT_MIN,INT_MAX);
+    }
+};
