@@ -1,0 +1,28 @@
+class Solution
+{
+  public:
+    Node* head=NULL;
+    Node* prev=NULL;//for storing the prev node for making links
+    void inorder(Node* root){
+        if(!root)return;
+        inorder(root->left);
+        if(!head){
+            head=root;
+            prev=root;
+        }
+        else{
+            prev->right=root;
+            root->left=prev;
+        }
+        prev=root;
+        inorder(root->right);
+        
+    }
+    Node *bTreeToCList(Node *root)
+    {
+       inorder(root);
+       head->left=prev;//head to tail link
+       prev->right=head;//tail to head link
+       return head;
+    }
+};
