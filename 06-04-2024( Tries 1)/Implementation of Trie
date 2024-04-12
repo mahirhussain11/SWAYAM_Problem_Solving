@@ -1,0 +1,57 @@
+#include<bits/stdc++.h>
+class Node{
+    public:
+     Node* children[26];
+     bool isWord=false;
+     Node()
+     {
+        for(auto &i:children)
+          i=NULL;
+     }
+    
+};
+class Trie {
+Node* root;
+public:
+    Trie() {
+        root=new Node;
+    }
+    
+    void inserting(string& word) {
+      int n=word.size();
+      Node* node=root;
+      for(int i=0;i<n;i++)
+      {
+        if(node->children[word[i]-'a']==NULL)
+           node->children[word[i]-'a']=new Node();
+      
+      node=node->children[word[i]-'a'];
+      }
+      node->isWord=true;
+    }
+    
+    bool searching(string& word) {
+    int n=word.size();
+    Node* node=root;
+    for(int i=0;i<n;i++)
+    {
+        if(node->children[word[i]-'a']==NULL)
+          return false;
+     
+     node=node->children[word[i]-'a']; 
+    }
+    return node->isWord;
+    }
+    
+    bool starting_with(string& prefix) {
+       int n = prefix.size();
+		Node* node = root;
+		for (int i = 0; i < n; i++) {
+			if (node->children[prefix[i] - 'a'] == NULL) {
+				return false;
+			}
+			node = node->children[prefix[i] - 'a'];
+		}
+		return true; 
+    }
+};
