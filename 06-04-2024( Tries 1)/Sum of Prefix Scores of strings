@@ -1,0 +1,53 @@
+class Solution {
+public:
+ struct Node
+ {
+    Node* children[26];
+    int count;
+    Node()
+    {
+        count=0;
+        for(int i=0;i<26;i++)
+          children[i]=NULL;
+    }
+ };
+ Node* root;
+ void inserting(string& word)
+ {
+    Node* node=root;
+    for(int i=0;i<word.size();i++)
+    {
+        if(node->children[word[i]-'a'])
+          node=node->children[word[i]-'a'];
+        else
+        {
+            node->children[word[i]-'a']=new Node;
+            node=node->children[word[i]-'a'];
+        }
+        node->count++;
+    }
+ }
+ int scores(string& word)
+ {
+    Node* node=root;
+    int c=0;
+    for(int i=0;i<word.size();i++)
+    {
+        if(node->children[word[i]-'a'])
+         node=node->children[word[i]-'a'];
+        c+=node->count;
+    }
+    return c;
+ }
+    vector<int> sumPrefixScores(vector<string>& words) {
+    root=new Node();
+    for(auto i:words)inserting(i);
+    vector<int>res;
+    for(auto i:words)
+    {
+        int temp=scores(i);
+        res.push_back(temp);
+    }  
+    return res;
+    }
+};
