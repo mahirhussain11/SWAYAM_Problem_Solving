@@ -1,0 +1,66 @@
+class Node{
+ public:
+     Node* children[2];
+     int counting;
+     Node()
+     {
+        children[0]=NULL;
+        children[1]=NULL;
+        counting=0;
+     }
+};
+class Trie{
+ Node* root;
+ public:
+  Trie()
+  {
+    root=new Node;
+
+  }
+  void inserting(int n)
+  {
+    Node* node=root;
+    for(int i=31;i>=0;i--)
+    {
+        int curr_bit=(n>>i)&1;
+        if(node->child[curr_bit]==NULL)
+        node->child[curr_bit]=new Node();
+        node=node->child[curr_bit];
+        node->count++;
+    }
+  }
+  int count_XOR_helper(int n,int high)
+  {
+    Node* node=root;
+    int ans=0;
+    for(int i=31;i>=0 && node!=NULL;i--)
+    {
+        int bit_Num=(n>>i)&1;
+        int bit_High=(high>>i)&1;
+        if(b_High==1)
+        {
+            if(node->child[bit_Num]!=NULL)
+              ans+=node->child[bit_Num]->counting;
+            node=node->child[1-bit_Num];
+        }
+        else
+        node=node->child[bit_Num];
+    }
+    return ans;
+  }
+
+};
+class Solution {
+public:
+    int countPairs(vector<int>& nums, int low, int high) {
+       Trie trie;
+       int ans=0;
+       for(int i:nums)
+       {
+        ans+=trie.count_XOR_helper(i,high+1)-trie.count_XOR_helper(i,low);
+        trie.insert(i);
+       } 
+       return ans;
+
+    }
+};
