@@ -1,0 +1,61 @@
+class Solution {
+public:
+    class TrieNode {
+    public:
+        int ans_idx;
+        TrieNode* children[26];
+
+        TrieNode(int idx) {
+            ans_idx = idx;
+            for (int i = 0; i < 26; i++) {
+                children[i] = nullptr;
+            }
+        }
+    };
+
+    void insertTrie(TrieNode* root, int idx, vector<string>& wordsContainer) {
+        string word = wordsContainer[idx];
+        int n = word.size();
+        for (int i = n - 1; i >= 0; i--) {
+            char c = word[i];
+            int char_idx = c - 'a';
+            if (root->children[char_idx] == nullptr) {
+                root->children[char_idx] = new TrieNode(idx);
+            }
+            root = root->children[char_idx];
+            if (wordsContainer[root->ans_idx].length() > n) {
+                root->ans_idx = idx;
+            }
+        }
+    }
+
+    int searchTrie(TrieNode* root, const string& s) {
+        int n = s.size();
+        int result_idx = root->ans_idx;
+        for (int i = n - 1; i >= 0; i--) {
+            int char_idx = s[i] - 'a';
+            root = root->children[char_idx];
+            if (root == nullptr) return result_idx;
+            result_idx = root->ans_idx;
+        }
+        return result_idx;
+    }
+
+    vector<int> stringIndices(vector<string>& wordsContainer, vector<string>& wordsQuery) {
+        int m = wordsContainer.size();
+        int n = wordsQuery.size();
+        vector<int> res(n);
+        TrieNode* root = new TrieNode(0);
+        for (int i = 0; i < m; i++) {
+            int idx = root->ans_idx;
+            if (wordsContainer[i].length() < wordsContainer[idx].length()) {
+                root->ans_idx = i;
+            }
+            insertTrie(root, i, wordsContainer);
+        }
+        for (int i = 0; i < n; i++) {
+            res[i] = searchTrie(root, wordsQuery[i]);
+        }
+        return res;
+    }
+};
