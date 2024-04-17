@@ -1,0 +1,50 @@
+#include<bits/stdc++.h>
+using namespace std;
+struct TrieNode
+{
+    public:
+     int cnt;
+     int sum;
+     TrieNode* children[2];
+     TrieNode()
+     {
+        children[0]=NULL;
+        children[1]=NULL;
+         cnt=0;
+         sum=0;
+     }
+};
+class Solution {
+public:
+void insert(TrieNode* root,int num,int idx)
+{
+  for(int i=31;i>=0;i--)
+    {   int curr_bit=1&(num>>i);
+        if(root->children[curr_bit]==NULL)root->children[curr_bit]=new TrieNode();
+        root=root->children[curr_bit];
+    }
+    root->sum+=idx;
+    root->cnt++;
+}
+int helper(TrieNode* root,int num,int idx)
+{   for(int i=31;i>=0;i--)
+    {
+      int curr_bit=1&(num>>i);
+        if(root->children[curr_bit]==NULL)return 0;
+        root=root->children[curr_bit];
+    }
+    return (((root->cnt)*idx)-(root->sum));
+}
+int countTriplets(vector<int>& nums) {
+      int res=0;
+      int curr_xor=0;
+      TrieNode* root=new TrieNode();
+      for(int i=0;i<nums.size();i++)
+      {
+        insert(root,curr_xor,i);
+        curr_xor^=nums[i];
+        res+=helper(root,curr_xor,i);
+      }  
+      return res;
+    }
+};
