@@ -1,0 +1,26 @@
+class Solution {
+  public:
+    bool helper(int i,vector<int> adj[],int vis[],int same_path_vis[]){
+        vis[i]=1;
+        same_path_vis[i]=1;
+        for(auto it:adj[i]){
+            if(!vis[it])
+            {if(helper(it,adj,vis,same_path_vis)==true)return true;
+            }
+            else if(same_path_vis[it])return true;
+        }
+        same_path_vis[i]=0;
+        return false;
+    }
+    bool isCyclic(int V, vector<int> adj[]) {
+        int vis[V]={0};
+        int same_path_vis[V]={0};
+        for(int i=0;i<V;i++){
+            if(!vis[i]){
+                if(helper(i,adj,vis,same_path_vis)==true)return true;
+            }
+        }
+        return false;
+        
+    }
+};
