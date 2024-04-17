@@ -1,0 +1,87 @@
+#include<bits/stdc++.h>
+using namespace std;
+struct TrieNode{
+    public:
+    TrieNode* children[26];
+    bool flag;
+    vector<int>p;
+    TrieNode()
+    {
+        flag=false;
+        for(int i=0;i<26;i++)
+          children[i]=NULL;
+    }
+    void putwords(char ch,TrieNode* node){
+         children[ch-'a']=node;
+    }
+
+    TrieNode* get(char ch){
+          return children[ch-'a'];
+    }
+    
+    bool containsKey(char ch){
+        return (children[ch-'a']!=NULL);
+    }
+};
+
+
+class Trie {
+public:
+    TrieNode* root;
+    vector<vector<string>>res;
+    Trie() {
+        root=new TrieNode();
+    }
+
+    void insert(string& word,int ind) {
+        TrieNode* node=root;
+
+        for(int i=0;i<word.size();i++){
+            if(!node->containsKey(word[i])){
+                node->putwords(word[i],new TrieNode());
+            }
+            node=node->get(word[i]);
+            node->p.push_back(ind);
+        }
+        node->flag=true;
+    }
+    
+    void search(string& word,vector<string>& contact) {
+        TrieNode* node=root;
+        vector<string>v;
+        int idx;
+        for( idx=0;idx<word.size();idx++){
+            if(!node->containsKey(word[idx])){
+                break;
+            }
+            node=node->get(word[idx]);
+            for(auto it:node->p){
+                v.push_back(contact[it]);
+            }
+            sort(v.begin(),v.end());
+            res.push_back(v);
+            v.clear();
+        }
+        v.clear();
+        v.push_back("0");
+        for(int j=idx;j<word.size();j++)
+          res.push_back(v);
+        
+        return;
+    }   
+};
+class Solution{
+public:
+    vector<vector<string>> displayContacts(int n, string contact[], string s)
+    {
+        Trie root;
+        unordered_set<string>st;
+        for(int i=0;i<n;i++)
+         st.insert(contact[i]);
+        vector<string> contacts;
+        for(auto it:st)contacts.push_back(it);
+        for(int i=0;i<contacts.size();i++)root.insert(contacts[i],i);
+        root.search(s,contacts);
+        return root.res;
+    }
+};
