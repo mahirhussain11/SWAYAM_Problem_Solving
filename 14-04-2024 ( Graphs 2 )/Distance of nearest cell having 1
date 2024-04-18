@@ -1,0 +1,35 @@
+vector<vector<int>>nearest(vector<vector<int>>grid)
+	{   int m=grid.size();
+	    int n=grid[0].size();
+	    vector<vector<int>>vis(m,vector<int>(n,0));
+	    vector<vector<int>>res(m,vector<int>(n,0));
+	    queue< pair < pair<int,int>, int > > pq;
+	    for(int i=0;i<m;i++){
+	        for(int j=0;j<n;j++){
+	            if(grid[i][j]==1){
+	                vis[i][j]=1;
+	                pq.push({{i,j},0});
+	            }
+	        }
+	    }
+	    int row_change[]={-1,0,1,0};
+	    int col_change[]={0,1,0,-1};
+	    while(!pq.empty()){
+	        int r=pq.front().first.first;
+	        int c=pq.front().first.second;
+	        int dis=pq.front().second;
+	        pq.pop();
+	        res[r][c]=dis;
+	        for(int i=0;i<4;i++){
+	            int nr=r+row_change[i];
+	            int nc=c+col_change[i];
+	            if(nr>=0 && nr<m && nc>=0 &&nc<n && vis[nr][nc]==0){
+	                pq.push({{nr,nc},dis+1});
+	                vis[nr][nc]=1;
+	            }
+	        }
+	    }
+	    return res;
+	}
+};
+
