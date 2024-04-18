@@ -1,0 +1,24 @@
+class Solution {
+public:
+    bool helper(vector<vector<int>>&adj_list,vector<int>&vis, int s, int des){
+        if(s==des)return true;
+        if(vis[s])return false;
+        vis[s]=1;
+        for(auto it:adj_list[s]){
+            if(helper(adj_list,vis,it,des))return true;
+        }
+        return false;
+    }
+    bool validPath(int n, vector<vector<int>>& edges, int source, int destination) {
+        if(source==destination)return true;
+        vector<vector<int>>adj_list(n);
+        for(auto it:edges){
+            int u=it[0];
+            int v=it[1];
+            adj_list[u].push_back(v);
+            adj_list[v].push_back(u);
+        }
+        vector<int>vis(n);
+        return helper(adj_list,vis,source,destination);
+    }
+};
