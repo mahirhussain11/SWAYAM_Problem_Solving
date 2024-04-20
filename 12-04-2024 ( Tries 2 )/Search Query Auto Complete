@@ -1,0 +1,58 @@
+#include<bits/stdc++.h>
+using namespace std;
+class TrieNode {
+public:
+    unordered_map<string, int> freq;
+    unordered_map<char, TrieNode*> child;
+};
+class AutoCompleteSystem {
+private:
+    TrieNode* root;
+    TrieNode* curr;
+    string curr_Query;
+
+    static bool cmp(pair<string, int>& a, pair<string, int>& b) {
+        return a.second > b.second || (a.second == b.second && a.first < b.first);
+    }
+public:
+  AutoCompleteSystem(vector<string>& sentence, vector<int>& time) {
+      root = new TrieNode();
+        curr = root;
+        curr_Query = "";
+        for (int i = 0; i < sentence.size(); ++i) {
+            insert(sentence[i], time[i]);
+        }
+    }
+    void insert(string s, int t) {
+        TrieNode* node = root;
+        for (char ch : s) {
+            if (!node->child[ch]) {
+                node->child[ch] = new TrieNode();
+            }
+            node = node->child[ch];
+            node->freq[s] += t;
+        }  
+    }
+    vector<string> input(char ch) {
+        if (ch == '#') {
+            insert(curr_Query, 1);
+            curr_Query = "";
+            curr = root;
+            return {};
+        }
+        curr_Query += ch;
+        if (!curr->child[ch]) {
+            curr->child[ch] = new TrieNode();
+            curr = curr->child[ch];
+            return {};
+        }
+        curr = curr->child[ch];
+        vector<pair<string, int>> suggest(curr->freq.begin(), curr->freq.end());
+        sort(suggest.begin(), suggest.end(), cmp);
+        vector<string> ans;
+        for (int i = 0; i < min(3, (int)suggest.size()); ++i) {
+            ans.push_back(suggest[i].first);
+        }
+        return ans;
+    }
+};
