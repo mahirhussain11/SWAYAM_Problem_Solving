@@ -1,0 +1,46 @@
+#include<bits/stdc++.h>
+using namespace std;
+string Solution::solve(int A, int B, int C, int D, vector<int> &E, vector<int> &F) {
+    vector<vector<int>> matrix(A+1,vector<int> (B+1));
+    for(int i=0;i<=A;i++)
+    {
+        for(int j=0;j<=B;j++)
+        {
+            bool flag=false;
+            for(int k=0;k<E.size();k++)
+            {
+              if((E[k]-i)*(E[k]-i)+(F[k]-j)*(F[k]-j)<=D*D)
+              {
+                  flag=true;
+                  break;
+              }
+            }
+           if(flag==1)matrix[i][j] = 1;
+           else matrix[i][j] = 0;
+        }
+    }
+    if(matrix[0][0]==1)return "NO";
+    queue<pair<int,int>> pq;
+    pq.push({0,0});
+    while(!pq.empty())
+    {
+       int row=q.front().first;
+       int col=q.front().second;
+       pq.pop();
+       if(row==A && col==B)return "YES";
+       for(int i=-1;i<=1;i++)
+       {
+           for(int j=-1;j<=1;j++)
+           {
+               int nr=row+i;
+               int nc=col+j;
+               if(nr>=0 && nr<=A && nc>=0 && nc<=B && matrix[nr][nc]==0)
+               {
+                   q.push({nr,nc});
+                   matrix[nr][nc]=1;
+               }
+           }
+       } 
+    }
+    return "NO";
+}
