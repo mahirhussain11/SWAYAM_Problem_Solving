@@ -1,0 +1,22 @@
+#include<bits/stdc++.h>
+using namespace std;
+int helper(int root_node, vector<vector<int>> &adj_list, int &res){
+    int mx = 0;
+    for(auto it : adj_list[root_node]){
+        int nH = helper(it, adj_list, res);
+        res = max(res, mx + nH);
+        mx = max(mx, nH);
+    }
+    return 1 + mx;
+}
+int Solution::solve(vector<int> &A) {
+    vector<vector<int>> adj_list(A.size());
+    int root_node = -1;
+    for(int i = 0; i < A.size(); i++){
+        if(A[i] != -1)adj_list[A[i]].push_back(i);
+        else root_node = i;
+    }
+    int res = 0;
+    helper(root_node, adj_list, res);
+    return res;
+}
