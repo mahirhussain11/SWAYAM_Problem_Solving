@@ -1,0 +1,26 @@
+class Solution {
+public:
+    void dfs_helper(int node,vector<int>&vis, vector<vector<int>>&adj_list){
+        vis[node]=1;
+        for(auto it:adj_list[node]){
+            if(!vis[it]){
+                dfs_helper(it,vis,adj_list);
+            }
+        }
+    }
+    vector<vector<int>> getAncestors(int n, vector<vector<int>>& edges) {
+        vector<vector<int>>adj_list(n);
+        vector<vector<int>>res(n);
+        for(auto it:edges){
+            adj_list[it[0]].push_back(it[1]);
+        }
+        for(int i=0;i<n;i++){
+            vector<int>vis(n,0);
+            dfs_helper(i,vis,adj_list);
+            for(int j=0;j<n;j++){
+                if(i!=j && vis[j]==1)res[j].push_back(i);
+            }
+        }
+        return res;
+    }
+};
