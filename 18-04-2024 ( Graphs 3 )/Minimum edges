@@ -1,0 +1,31 @@
+class Solution{
+    public:
+        int minimumEdgeReversal(vector<vector<int>> &edges,int n,int src,int dst)
+        {
+            vector<pair<int,int>>adj[n+1];
+            for(auto it:edges){
+                adj[it[0]].push_back({it[1],0});
+                adj[it[1]].push_back({it[0],1});
+            }
+            priority_queue< pair<int,int> , vector< pair<int,int> > , greater< pair<int,int> > > pq;
+            vector<int>distance(n+1,INT_MAX);
+            pq.push({0,src});
+            distance[src]=0;
+            while(!pq.empty()){
+                auto it=pq.top();
+                pq.pop();
+                int dis=it.first;
+                int adjNode=it.second;
+                for(auto it:adj[adjNode]){
+                    int node=it.first;
+                    int wt=it.second;
+                    if(dis+wt<distance[node]){
+                        distance[node]=dis+wt;
+                        pq.push({dis+wt,node});
+                    }
+                }
+            }
+            if(distance[dst]==INT_MAX)return -1;
+            else return distance[dst];
+        }
+};
