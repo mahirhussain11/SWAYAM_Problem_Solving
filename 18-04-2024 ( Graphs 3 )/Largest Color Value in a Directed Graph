@@ -1,0 +1,90 @@
+class Solution {
+public:
+    bool helper(int node,vector<vector<int>>&adj_list,vector<int>&vis,vector<int>&path_vis){
+        vis[node]=1;
+        path_vis[node]=1;
+        for(auto it:adj_list[node]){
+            if(!vis[it])
+            {
+                if(helper(it,adj_list,vis,path_vis)==true)return true;
+            }
+            else if(path_vis[it])return true;
+        }
+        path_vis[node]=0;
+        return false;
+    }
+    bool hasCycle(vector<vector<int>>& edges,int V){
+        vector<vector<int>>adj_list(V);
+        for(auto it:edges){
+            adj_list[it[0]].push_back(it[1]);
+        }
+        vector<int>vis(V,0);
+        vector<int>path_vis(V,0);
+        for(int i=0;i<V;i++){
+            if(!vis[i])if(helper(i,adj_list,vis,path_vis)==true)return true;
+        }
+        return false;
+    }
+    int largestPathValue(string colors, vector<vector<int>>& edges) {
+        int n=colors.size();       
+        if(hasCycle(edges,n))return -1;
+     
+        vector<int>indegree(n,0);
+        vector<vector<int>>adj_list(n,vector<int>());
+         for(auto it:edges)
+         {
+            adj_list[it[0]].push_back(it[1]);
+            indegree[it[1]]++;
+         }
+         queue<int>pq;
+         for(int i=0;i<n;i++){
+             if(indegree[i]==0)pq.push(i);
+         }
+        vector<vector<int>>freq(n,vector<int>(26,0));
+        for(int i=0;i<n;i++){
+            freq[i][colors[i]-'a']++;
+        }
+        int mx_cnt=0;
+        while(!pq.empty()){
+            int curr=pq.front();
+            pq.pop();
+            for(auto it:adj_list[curr]){
+                for(int i=0;i<26;i++){
+                    freq[it][i]=max(freq[it][i],freq[curr][i]+(colors[it]-'a'==i?1:0));
+                }
+                indegree[it]--;
+                if(indegree[it]==0){
+                    pq.push(it);
+                }
+                
+            }
+            mx_cnt=max(mx_cnt,*max_element(freq[curr].begin(),freq[curr].end()));
+        }
+        return mx_cnt;
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
