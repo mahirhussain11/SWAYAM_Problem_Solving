@@ -1,0 +1,49 @@
+
+class Solution
+{
+	public:
+	//Function to find number of strongly connected components in the graph.
+	void helper(int node,vector<int>&vis,stack<int>&st,vector<vector<int>>& adj){
+	    vis[node]=1;
+	    for(auto it:adj[node]){
+	        if(!vis[it])helper(it,vis,st,adj);
+	    }
+	    st.push(node);
+	}
+	void helper2(int node,vector<int>&vis2, vector<vector<int>>&adj2){
+	    vis2[node]=1;
+	    for(auto it:adj2[node]){
+	        if(!vis2[it])helper2(it,vis2,adj2);
+	    }
+	}
+    int kosaraju(int V, vector<vector<int>>& adj)
+    {
+        //code here
+        vector<int>vis(V,0);
+        stack<int>st;
+        for(int i=0;i<V;i++){
+            if(!vis[i]){
+                helper(i,vis,st,adj);
+            }
+        }
+        vector<vector<int>>adj2(V,vector<int>());
+        for(int i=0;i<V;i++){
+            for(auto it:adj[i]){
+                adj2[it].push_back(i);
+            }
+        }
+        int cnt=0;
+        vector<int>vis2(V,0);
+        while(!st.empty()){
+            int curr_node=st.top();
+            st.pop();
+            if(!vis2[curr_node]){
+                cnt++;
+                helper2(curr_node,vis2,adj2);
+            }
+        }
+        return cnt;
+    }
+};
+
+
