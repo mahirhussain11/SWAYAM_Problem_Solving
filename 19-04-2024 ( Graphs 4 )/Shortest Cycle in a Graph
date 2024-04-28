@@ -1,0 +1,37 @@
+class Solution {
+public:
+    int findShortestCycle(int n, vector<vector<int>>& edges) {
+        vector<vector<int>>adj_list(n,vector<int>());
+        for(auto it:edges){
+            adj_list[it[0]].push_back(it[1]);
+            adj_list[it[1]].push_back(it[0]);
+        }
+        int ans=INT_MAX;
+        for(int i=0;i<n;i++){
+           vector<int>vis(n+1,0);
+           vector<int>dis(n+1,0);
+           queue< pair<int,int> > pq;
+           pq.push({i,-1});
+           vis[i]=1;
+           dis[i]=0;
+           while(!pq.empty()){
+              auto it=pq.front();
+              pq.pop();
+              int curr=it.first;
+              int par=it.second;
+              for(auto it2:adj_list[curr]){
+                 if(!vis[it2]){
+                    dis[it2]=dis[curr]+1;
+                    vis[it2]=1;
+                    pq.push({it2,curr});
+                 }
+                 else if(it2!=par){
+                    ans=min(ans,dis[it2]+dis[curr]+1);
+                 }
+              }
+           }
+        }
+        if(ans==INT_MAX)return -1;
+        return ans;
+    }
+};
