@@ -1,0 +1,23 @@
+class Solution {
+public:
+    void helper(Node* node,Node* clone,vector<Node*>&vis){
+        vis[clone->val]=clone;
+        for(auto it:node->neighbors){
+            if(vis[it->val]==NULL){
+                Node* newnode=new Node(it->val);
+                (clone->neighbors).push_back(newnode);
+                helper(it,newnode,vis);
+            }
+            else{
+                 (clone->neighbors).push_back(vis[it->val]);
+            }
+        }
+    }
+    Node* cloneGraph(Node* node) {
+        if(node==NULL)return NULL;
+        vector<Node*>vis(101,NULL);
+        Node* clone=new Node(node->val);
+        helper(node,clone,vis);
+        return clone;
+    }
+};
