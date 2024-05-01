@@ -1,0 +1,87 @@
+class DSU{
+    public:
+    vector<int>parent;
+    vector<int>rank;
+    int comp;
+    DSU(int n){
+        parent.resize(n+1);
+        for(int i=1;i<=n;i++){
+            parent[i]=i;
+        }
+        rank.resize(n+1);
+        comp=n;
+    }
+    int find(int x){
+        if(x==parent[x])return x;
+        return parent[x]=find(parent[x]);
+    }
+    void Union(int x, int y){
+        int x_par=find(x);
+        int y_par=find(y);
+        if(x_par==y_par)return;
+        if(rank[x_par]>rank[y_par]){
+            parent[y_par]=x_par;
+        }
+        else if(rank[x_par]<rank[y_par]){
+            parent[x_par]=y_par;
+        }
+        else{
+            parent[x_par]=y_par;
+            rank[y_par]++;
+        }
+        comp--;//we are making union thus dec the comp
+    }
+    bool Component_Cnt(){
+        return comp==1;
+    }
+};
+
+
+class Solution {
+public:
+   
+    int maxNumEdgesToRemove(int n, vector<vector<int>>& edges) {
+            DSU Alice(n);
+            DSU Bob(n);
+            
+            sort(begin(edges), end(edges), [](const vector<int>& v1, const vector<int>& v2) {
+            return v1[0] > v2[0];
+            });
+            int edge_cnt=0;
+            for(auto& it:edges){
+                int type=it[0];
+                int a=it[1];
+                int b=it[2];
+                if(type==3){
+                    bool temp=false;
+                    if(Alice.find(a)!=Alice.find(b)){
+                        Alice.Union(a,b);
+                        temp=true;
+                    }
+                    if(Bob.find(a)!=Bob.find(b)){
+                        Bob.Union(a,b);
+                        temp=true;
+                    }
+                    if(temp==true)edge_cnt++;
+                }
+                else if(type==2){
+                    if(Bob.find(a)!=Bob.find(b)){
+                        Bob.Union(a,b);
+                        edge_cnt++;
+                    }
+                    
+                }
+                else{
+                    if(Alice.find(a)!=Alice.find(b)){
+                        Alice.Union(a,b);
+                        edge_cnt++;
+                    }
+            
+                }
+            }
+            if(Alice.Component_Cnt()==true && Bob.Component_Cnt()==true){
+                return edges.size()-edge_cnt;
+            }
+            return -1;
+        }
+    };
