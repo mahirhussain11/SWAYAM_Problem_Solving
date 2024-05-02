@@ -1,0 +1,36 @@
+class Solution {
+public:
+    int maxScore(vector<int>& nums, int k) {
+        int left_sum=0;
+        int right_sum=0;
+        int s=0;
+        int e=nums.size()-1;
+        int e1=k-1;
+        int e2=e-k+1;
+        int sum=0;
+        for(int i=0;i<k;i++){
+            left_sum+=nums[i];
+        }
+        for(int i=e;i>e-k;i--){
+            right_sum+=nums[i];
+        }
+        if(k==nums.size())return left_sum;
+        while(k--){
+            if(left_sum>right_sum){
+                sum+=nums[s];
+                left_sum-=nums[s];
+                s++;
+                right_sum-=nums[e2];
+                e2++;
+            }
+            else{
+                sum+=nums[e];
+                right_sum-=nums[e];
+                e--;
+                left_sum-=nums[e1];
+                e1--;
+            }
+        }
+        return sum;
+    }
+};
