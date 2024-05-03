@@ -1,0 +1,53 @@
+class Solution {
+public:
+    int ceil_helper(vector<int>&heaters,int x){
+    int l = 0;
+    int r = heaters.size() - 1;
+    int ceil = -1;
+    while(l<=r){
+        int mid = l + (r - l) / 2;
+        if(heaters[mid]==x)
+            return heaters[mid];
+        else if(heaters[mid]>x){
+            ceil = heaters[mid];
+            r=mid - 1;
+        }
+        else{
+            l = mid + 1;
+        }
+    }
+    return ceil;
+}
+int floor_helper(vector<int>&heaters,int x){
+    int l = 0;
+    int r = heaters.size() - 1;
+    int floor = -1;
+    while(l<=r){
+        int mid = l + (r - l) / 2;
+        if(heaters[mid]==x)
+            return heaters[mid];
+        else if(heaters[mid]<x){
+            floor = heaters[mid];
+            l = mid + 1;
+        }
+        else{
+            r = mid - 1;
+        }
+    }
+    return floor;
+}
+    int findRadius(vector<int>& houses, vector<int>& heaters) {
+        sort(heaters.begin(), heaters.end());
+    int ans = 0;
+    for (int i = 0; i < houses.size();i++){
+        int a = floor_helper(heaters, houses[i]);
+        if(a==-1)a = 1e9;
+        else a = houses[i] - a;
+        int b = ceil_helper(heaters, houses[i]);
+        if(b==-1)b = 1e9;
+        else b = b - houses[i];
+        ans = max(ans, min(a, b));
+    }
+    return ans;
+    }
+};
