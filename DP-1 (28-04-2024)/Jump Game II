@@ -1,0 +1,43 @@
+/* Memoization
+class Solution {
+public:
+    int helper(int idx,int n,vector<int>&nums,vector<int>&dp){
+        if(idx==n-1)return 0;
+        if(idx>=n)return INT_MAX;
+        if(dp[idx]!=-1)return dp[idx];
+        int min_jumps=INT_MAX;
+        for(int i=1;i<=nums[idx];i++){
+            int curr_jumps=helper(idx+i,n,nums,dp);
+            if(curr_jumps!=INT_MAX){
+                min_jumps=min(min_jumps,1+curr_jumps);
+            }
+        }
+        return dp[idx]=min_jumps;
+
+    }
+    int jump(vector<int>& nums) {
+        int n=nums.size();
+        vector<int>dp(n+1,-1);
+        return helper(0,n,nums,dp);
+    }
+};
+*/ 
+//Tabulation
+class Solution {
+public:
+    int jump(vector<int>& nums) {
+        int n=nums.size();
+        vector<int>dp(n+1);
+        dp[n-1]=0;
+        for(int i=n-2;i>=0;i--){
+            int temp=1e9;
+            for(int j=nums[i];j>0;j--){
+               temp=min(temp,1+( i+j>=n ? 0: dp[i+j]));
+                
+            }
+            dp[i]=temp;
+        }
+        return dp[0];
+        
+    }
+};
