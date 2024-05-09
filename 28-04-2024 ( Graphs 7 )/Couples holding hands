@@ -1,0 +1,60 @@
+class DSU {
+ private:
+    int parent[1000];
+    int rank[1000];
+    public:
+         DSU(int n) {
+             for(int i = 0; i < n + 1; i++) {
+                parent[i] = i;
+                rank[i] = 0;
+            }
+        }
+        int ultimateparent(int node) {
+            if(parent[node] == node) return node;
+            return parent[node] = ultimateparent(parent[node]);
+        }
+
+
+        void Union(int node1, int node2) {
+            
+            int parent1 = ultimateparent(node1);
+            int parent2 = ultimateparent(node2);
+
+            if(parent1 == parent2) return;
+            else {
+                if(rank[parent1] < rank[parent2]) {
+                    parent[parent1] = parent2;
+                } else if(rank[parent1] > rank[parent2]) {
+                    parent[parent2] = parent1;
+                } else {
+                    parent[parent1] = parent2;
+                    rank[parent2]++;
+                }
+            }
+        }
+};
+class Solution {
+public:
+    int minSwapsCouples(vector<int>& row) {
+        int ans = 0;
+        int m = row.size();
+        DSU c(m);
+       
+        for (int i = 0; i < m; i+=2) {
+            c.Union(i,i+1);
+        }
+        
+        for (int i = 0; i < m; i += 2) {
+            int l=c.ultimateparent(row[i]);
+            int r=c.ultimateparent(row[i+1]);
+
+            if(l!=r){
+            
+                c.unionbyrank(l,r);
+                ans++;
+            }
+        }
+
+        return ans;
+    }
+};
