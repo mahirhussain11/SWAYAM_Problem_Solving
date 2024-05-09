@@ -1,0 +1,20 @@
+//Memoization
+class Solution{
+public:
+    int helper(int N,vector<vector<int>>&mat,int row,int col,vector<vector<int>>&dp){
+        if(col>=N)return 0;
+        if(dp[row][col]!=-1)return dp[row][col];
+        int t=mat[row][col]+max(helper(N,mat,1,col+2,dp),helper(N,mat,0,col+2,dp));
+        int nt1=helper(N,mat,1,col+1,dp);
+        int nt2=helper(N,mat,0,col+1,dp);
+        return dp[row][col]=max(t,max(nt1,nt2));
+    }
+    int maxSum(int N, vector<vector<int>> mat)
+    {
+        vector<vector<int>>dp(3,vector<int>(N+1,-1));
+        return max(helper(N,mat,0,0,dp),helper(N,mat,1,0,dp));
+    }
+};
+------------------------------------------------------------------------------------------------
+
+
