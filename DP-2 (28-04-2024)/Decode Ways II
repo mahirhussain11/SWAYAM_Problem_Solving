@@ -1,0 +1,41 @@
+class Solution {
+public:
+    int mod=1e9+7;
+    long long helper(int idx,int n,string& s, vector<long long>&dp){
+        if(idx==n)return 1;
+        if(s[idx]=='0')return 0;
+        if(dp[idx]!=-1)return dp[idx];
+        long long res=0;
+        long long m=1;
+        if(s[idx]=='*'){
+            m=9;
+        }
+        res+=m*helper(idx+1,n,s,dp);
+        if(idx<n-1){
+            int op=0;
+            if(s[idx]=='*'){
+                if(s[idx+1]=='*')op=15;
+                else{
+                    if(s[idx+1]<='6')op=2;
+                    else op=1;
+                }
+            }
+            else if(s[idx]<'3'){
+                if(s[idx+1]=='*'){
+                    if(s[idx]=='1')op=9;
+                    else op=6;
+                }
+                else{
+                    if(stoi(s.substr(idx,2))<=26)op=1;
+                }
+            }
+            if(op)res+=op*helper(idx+2,n,s,dp);
+        }
+        return dp[idx]=res%mod;
+    }
+    int numDecodings(string s) {
+        int n=s.size();
+        vector<long long>dp(n+1,-1);
+        return helper(0,n,s,dp);
+    }
+};
