@@ -1,0 +1,60 @@
+/* Method1 - Memoization
+class Solution {
+public:
+    int helper(int idx,int p_idx,vector<int>& nums,vector<vector<int>>&dp){
+        if(idx==nums.size())return 0;
+        if(dp[idx][p_idx+1]!=-1)return dp[idx][p_idx+1];
+        int not_take=helper(idx+1,p_idx,nums,dp);
+        int take=INT_MIN;
+        if(p_idx==-1||nums[idx]>nums[p_idx]){
+            take=1+helper(idx+1,idx,nums,dp);
+        }
+        return dp[idx][p_idx+1]=max(take,not_take);
+    }
+    int lengthOfLIS(vector<int>& nums) {
+        int n=nums.size();
+        vector<vector<int>>dp(n,vector<int>(n+1,-1));
+        return helper(0,-1,nums,dp);
+    }
+};
+*/
+/*Method2 - Tabulation
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        int n=nums.size();
+        vector<vector<int>>dp(n+1,vector<int>(n+1,0));
+        for(int idx=n-1;idx>=0;idx--){
+            for(int p_idx=idx-1;p_idx>=-1;p_idx--){
+                int not_take=dp[idx+1][p_idx+1];
+                int take=INT_MIN;
+                if(p_idx==-1||nums[idx]>nums[p_idx]){
+                    take=1+dp[idx+1][idx+1];
+                }
+                dp[idx][p_idx+1]=max(take,not_take);
+            }
+        }
+        return dp[0][0];
+    }
+};
+*/
+//Method3- Using Binary Search
+class Solution {
+public:
+   
+    int lengthOfLIS(vector<int>& nums) {
+       int n=nums.size();
+       vector<int>res;
+       res.push_back(nums[0]);
+       for(int i=1;i<n;i++){
+         if(nums[i]>res.back()){
+            res.push_back(nums[i]);
+         }
+         else{
+            int idx=lower_bound(res.begin(),res.end(),nums[i])-res.begin();
+            res[idx]=nums[i];
+         }
+       }
+       return res.size();
+    }
+};
