@@ -1,0 +1,73 @@
+//Memoization-
+class Solution {
+public:
+    
+    int mod=1e9+7;
+    int helper(int dice,int face,int t,vector<vector<int>>&dp){
+        if(t<0)return 0;
+        if(dice==0 && t!=0)return 0;
+        if(dice!=0 && t==0)return 0;
+        if(dice==0 && t==0)return 1;
+        if(dp[dice][t]!=-1)return dp[dice][t];
+        int ans=0;
+        for(int i=1;i<=face;i++){
+            ans=(ans+(helper(dice-1,face,t-i,dp))%mod)%mod;
+        }
+        return dp[dice][t]=ans%mod;
+    }
+    int numRollsToTarget(int n, int k, int target) {
+        vector<vector<int>>dp(n+1,vector<int>(target+1,-1));
+        return helper(n,k,target,dp);
+    }
+};
+--------------------------------------------------------------
+
+
+//Tabulation
+class Solution {
+public:
+    
+    int mod=1e9+7;
+    int numRollsToTarget(int n, int k, int target) {
+        vector<vector<int>>dp(n+1,vector<int>(target+1,0));
+        dp[0][0]=1;
+        for(int dice=1;dice<=n;dice++){
+            for(int t=1;t<=target;t++)
+            {
+                 int ans=0;
+                for(int i=1;i<=k;i++)
+                {
+                        if(t-i>=0)ans=(ans+(dp[dice-1][t-i])%mod)%mod;
+                }
+                dp[dice][t]=ans%mod;
+            } 
+
+        }
+        return dp[n][target];
+        
+    }
+};
+
+//Space optimization
+class Solution {
+public:
+    
+    int mod=1e9+7;
+    int numRollsToTarget(int n, int k, int target) {
+        vector<int>prev(target+1,0);
+        vector<int>curr(target+1,0);
+        prev[0]=1;
+        for(int dice=1;dice<=n;dice++){
+            for(int t=1;t<=target;t++){
+                int ans=0;
+                for(int i=1;i<=k;i++)
+                {
+                    if(t-i>=0)ans=(ans+(prev[t-i])%mod)%mod;
+                }
+                curr[t]=ans%mod;
+            }
+            prev=curr;
+        }
+        return prev[target];
+    }
+};
