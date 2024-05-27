@@ -1,0 +1,21 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int mod = 1e9 + 7;
+int helper(int curr_sum, int t,vector<int> &dp){
+    if(curr_sum==t)return 1;
+    if(curr_sum>t)return 0;
+    if(dp[curr_sum]!=-1)
+        return dp[curr_sum];
+    int ways = 0;
+    for (int i = 1; i <= 6;i++){
+        ways=(ways+helper(curr_sum+i,t,dp)%mod)%mod;
+    }
+    return dp[curr_sum]=ways;
+}
+int main(){
+    int n;
+    cin >> n;
+    vector<int> dp(n + 1, -1);
+    cout << helper(0, n,dp) << endl;
+    return 0;
+}
