@@ -1,0 +1,17 @@
+class Solution {
+public:
+    long long helper(int idx, int n, vector<vector<int>>& q, vector<long long>&dp){
+        if(idx==n-1)return q[n-1][0];
+        if(idx>=n)return 0;
+        if(dp[idx]!=-1)return dp[idx];
+        long long not_take=helper(idx+1,n,q,dp);
+        long long take=q[idx][0]+helper(idx+q[idx][1]+1,n,q,dp);
+        return dp[idx]=max(take,not_take);
+        
+    }
+    long long mostPoints(vector<vector<int>>& q) {
+        int n=q.size();
+        vector<long long>dp(n+1,-1);
+        return helper(0,n,q,dp);
+    }
+};
