@@ -1,0 +1,44 @@
+class Solution {
+public:
+    void helper(unordered_map<string,vector<pair<string,double>>>&adj_list,string s, string d,unordered_set<string>&vis,double mul,double& ans){
+        if(vis.find(s)!=vis.end())return;
+        vis.insert(s);
+        if(s==d){
+            ans=mul;
+            return;
+        }
+        for(auto it:adj_list[s]){
+            string next_node=it.first;
+            double val=it.second;
+            helper(adj_list,next_node,d,vis,mul*val,ans);
+        }
+
+    }
+    vector<double> calcEquation(vector<vector<string>>& eq, vector<double>& val, vector<vector<string>>& q) {
+        int n=eq.size();
+        unordered_map<string,vector<pair<string,double>>>adj_list;
+        for(int i=0;i<n;i++){
+            string u=eq[i][0];
+            string v=eq[i][1];
+            double wt=val[i];
+            adj_list[u].push_back({v,wt});
+            adj_list[v].push_back({u,1.0/wt});
+        }
+
+        vector<double>res;
+        for(int i=0;i<q.size();i++){
+            string s=q[i][0];
+            string d=q[i][1];
+            double temp=-1.0;
+            double mul=1.0;
+            if(adj_list.find(s)!=adj_list.end()){
+                unordered_set<string>vis;
+                helper(adj_list,s,d,vis,mul,temp);
+            }
+            res.push_back(temp);
+        }
+        return res;
+
+
+    }
+};
