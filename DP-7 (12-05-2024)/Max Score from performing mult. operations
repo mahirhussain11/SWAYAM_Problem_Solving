@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int helper(int idx,int s, int e,vector<int>& nums, vector<int>& mul, vector<vector<int>>&dp){
+        if(idx>=mul.size())return 0;
+        if(dp[idx][s]!=-1)return dp[idx][s];
+        int op1=nums[s]*mul[idx]+helper(idx+1,s+1,e,nums,mul,dp);
+        int op2=nums[e]*mul[idx]+helper(idx+1,s,e-1,nums,mul,dp);
+        return dp[idx][s]=max(op1,op2);
+    }
+    int maximumScore(vector<int>& nums, vector<int>& mul) {
+        int m=nums.size();
+        int n=mul.size();
+        vector<vector<int>>dp(m,vector<int>(n,-1));
+        int s=0;
+        int e=m-1;
+        return helper(0,s,e,nums,mul,dp);
+    }
+};
